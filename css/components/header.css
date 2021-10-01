@@ -1,0 +1,17 @@
+.header {
+  background: #E5E7EB;
+  cursor: pointer;
+  height: 48px;
+  text-align: center;
+}
+
+.title-header {
+  margin-top: 12px;
+}
+
+.logout-header {
+  cursor: pointer;
+  position: absolute;
+  right: 19px;
+  top: 16px;
+}

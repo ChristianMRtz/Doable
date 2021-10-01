@@ -1,0 +1,109 @@
+:root {
+  --border-sky: #0079bf;
+  --border-gray: #ebecf0;
+  --gray-200: #f4f5f7;
+  --gray-400: #58595a;
+  --link: #0079bf;
+  --btn-green: #5aac44;
+  --btn-red: #cf513d;
+  --dark-blue-font: #172b4d;
+  --bg-sky-link: #e4f0f6;
+  --shadow-form: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  --shadow-board: 0 5px 25px rgba(0, 0, 0, 0.2);
+  --shadow-board-in: inset 0 5px 25px rgba(0, 0, 0, 0.2);
+  --steelblue: #0079bf;
+  --mustard: #d29034;
+  --green: #519839;
+  --red: #b04632;
+  --purple: #89609e;
+  --pink: #cd5a90;
+  --green-lime: #4bbf6b;
+  --lime: #4bbf6b;;
+  --sky-blue: #0aaecb;
+  --sky: #0aaecb;
+  --grey: #838c90;
+  --blue: #0079bf;
+  --orange: #d29034;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.container-center {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+}
+
+/* Colores de la paleta del Modal */
+
+.steelblue {
+  background: #0079bf;
+}
+
+.mustard {
+  background: #d29034;
+}
+
+.green {
+  background: #519839;
+}
+
+.red {
+  background: #b04632;
+}
+
+.purple {
+  background: #89609e;
+}
+
+.pink {
+  background-color: #cd5a90;
+}
+
+.green-lime, .lime {
+  background: #4bbf6b;
+}
+
+.sky-blue, .sky {
+  background: #0aaecb;
+}
+
+.grey {
+  background: #838c90;
+}
+
+.blue {
+  background: #0079bf;
+}
+
+.orange {
+  background: #d29034;
+}
+
+.subtitle {
+  display: flex;
+  flex-direction: row;
+  margin-left: 32px;
+  gap: 8px;
+}
+
+.boards-page, .other-boards, .favorite-boards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section {
+  margin: 0 32px;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
+option {
+  background: #E5E5E5;
+}

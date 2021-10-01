@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+  <header class="header">
+    <img src="../assets/doable.svg" class="title-header">
+    <img src="../assets/logout.svg" class="logout-header">
+  </header>
+  <div class="options">
+    <div class="list-option">
+      <label class="title-option">Sort</label>
+      <select id="option_order">
+        <option value="alphabetical">Alphabetical (a-z)</option>
+        <option value="date">Due date</option>
+        <option value="importance">Importance</option>
+      </select>
+    </div>
+    <div class="select-option">
+      <label class="title-option">Show</label>
+      <form class="option-view">
+        <input type="checkbox" id="pending" value="pending">
+        <label for="pending" class="options-view"> Only pending</label>
+        <input type="checkbox" id="important" value="important">
+        <label for="important" class="options-view"> Only important</label>
+      </form>
+    </div>
+  </div>
+  <div class="content">
+    <div class="task-content">
+      <div class="title-content">
+        <div class="check-input">
+          <input type="checkbox" id="1" value="Write LinkedIn heading">
+          <label class="title-task">Write LinkedIn heading</label>
+        </div>
+        <div class="btn-imp">
+          <img src="../assets/importance.svg" class="icon-imp">
+        </div>
+      </div>
+      <p class="date-task">Saturday, October 02</p>
+    </div>
+    <div class="task-content">
+      <div class="title-content">
+        <div class="check-input">
+          <input type="checkbox" id="1" value="Do exercise">
+          <label class="title-task">Do exercise</label>
+        </div>
+        <div class="btn-imp">
+          <img src="../assets/importance.svg" class="icon-imp">
+        </div>
+      </div>
+    </div>
+    <div class="task-content">
+      <div class="title-content">
+        <div class="check-input">
+          <input type="checkbox" id="2" value="Finish module evaluation">
+          <label class="title-task">Finish module evaluation</label>
+        </div>
+        <div class="btn-imp">
+          <img src="../assets/importance.svg" class="icon-imp">
+        </div>
+      </div>
+      <p class="date-task">Sunday, October 03</p>
+    </div>
+
+  </div>
+  <footer class = "footer-form">
+    <form>
+      <input type="text" placeholder="do the dishes..." class="input-footer">
+      <input type="date" class="input-footer">
+      <button type="submit" class="btn-submit">Add Task</button>
+    </form>
+  </footer>
+</body>
+
+</html>

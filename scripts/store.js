@@ -22,10 +22,18 @@ const STORE = (function () {
     tasks = [...tasks, newTask];
   }
 
+  function updateTask(id, data) {
+    tasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, ...data };
+      }
+      return task;
+    });
+  }
+
   function deleteTask(taskId) {
     tasks = tasks.filter((task) => task.id !== taskId);
   }
-
 
   function clear() {
     this.userData = {};
@@ -39,6 +47,7 @@ const STORE = (function () {
     setTasks,
     addTask,
     deleteTask,
+    updateTask,
     clear,
   };
 })();

@@ -1,3 +1,6 @@
+import ImportanceI from "../components/importance_important.js";
+import ImportanceP from "../components/importance_pending.js";
+import Task from "../components/tasks.js";
 import DOMHandler from "../dom_handler.js";
 import { TaskFetcher } from "../services/task_fetcher.js";
 import STORE from "../store.js";
@@ -7,8 +10,7 @@ import Main from "./main.js";
 import Pending from "./pending.js";
 
 const Importance = (() => {
-  
-  let enabledSettings = []
+  let enabledSettings = [];
 
   async function createTask(e) {
     e.preventDefault();
@@ -28,46 +30,84 @@ const Importance = (() => {
   }
 
   function changeOption() {
-    const options = enabledSettings
-    if (options.length === 0){
-      DOMHandler.render(Main)
+    const options = enabledSettings;
+    if (options.length === 0) {
+      DOMHandler.render(Main);
+    } else if (options[0] === "pending") {
+      DOMHandler.render(ImportanceP);
+    } else if (options[0] === "important") {
+      DOMHandler.render(ImportanceI);
     }
-    else if (options[0] === "pending"){
-      DOMHandler.render(Pending)
+  }
+
+  async function goToLogout(e) {
+    const logoutConf = confirm("Are you sure you want to log out?");
+    if (logoutConf === true) {
+      e.preventDefault();
+      try {
+        await SessionsFetcher.logout();
+        sessionStorage.removeItem("token");
+        STORE.clear();
+        DOMHandler.render(Login);
+      } catch (e) {
+        alert(e);
+      }
+    } else {
+      DOMHandler.render(Main);
     }
-    else if (options[0] === "important"){
-      DOMHandler.render(Important)
+  }
+
+  async function editBoolean(e) {
+    e.preventDefault();
+    const id = parseInt(e.target.id);
+    const important = e.target.class;
+    const completed = e.target.checked;
+    try {
+      const editTask = await TaskFetcher.update(id, important, completed);
+      const newData = {
+        important: editTask.important,
+        completed: editTask.completed,
+      };
+      STORE.updateTask(id, newData);
+      DOMHandler.render(Main);
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    }
+  }
+
+  async function editImportant(e) {
+    const check = e.target.closest(".js-select-important");
+    const checkImportant = check.closest(".btn-imp");
+    if (check) {
+      e.preventDefault();
+      const id = parseInt(check.id);
+      const important = checkImportant.id === "false" ? true : false;
+      try {
+        const editTask = await TaskFetcher.update(id, important);
+        const newData = {
+          important: editTask.important,
+        };
+        STORE.updateTask(id, newData);
+        DOMHandler.render(Importance);
+      } catch (e) {
+        console.log(e);
+        alert(e);
+      }
     }
   }
 
   function generateTasks() {
     const tasks = STORE.getTasks();
     const taskord = tasks.sort((a, b) => (a.important < b.important) * 2 - 1);
-    return taskord
-      .map(
-        (task) => `
-        <div class="task-content">
-          <div class="title-content">
-            <div class="check-input">
-              <input type="checkbox" id="${task.id}" value="${task.title}" ${task.completed === true ? `checked = "true"` : ""}>
-              <label class="title-task ${task.completed === true ? "completed" : ""}">${task.title}</label>
-            </div>
-            <div class="btn-imp">
-              <img src="../assets/${task.important === true ? "important.svg" : "noneimportant.svg" }" class="${task.completed === true ? "icon-imp" : ""}">
-            </div>
-          </div>
-          <p class="date-task ${task.completed === true ? "completed-too" : ""}">${task.due_date === null ? "" : task.due_date}</p>
-        </div>
-        `
-      )
-      .join("");
+    return taskord.map((taskData) => new Task(taskData)).join("");
   }
 
   return {
     render: () => `  
    <header class="header">
     <img src="../assets/doable.svg" class="title-header">
-    <img src="../assets/logout.svg" class="logout-header">
+    <img src="../assets/logout.svg" class="js-logout logout-header">
   </header>
   <div class="options">
     <div class="list-option">
@@ -107,17 +147,22 @@ const Importance = (() => {
       form.addEventListener("submit", createTask);
       const selected = document.querySelector(".js-selected");
       selected.addEventListener("change", optionOrder);
+      const btnLogout = document.querySelector(".js-logout");
+      btnLogout.addEventListener("click", goToLogout);
+      const editbtn = document.querySelector(`.content`);
+      editbtn.addEventListener("change", editBoolean);
+      const editImportants = document.querySelector(`.content`);
+      editImportants.addEventListener("click", editImportant);
       const checkboxes = document.querySelectorAll(
         "input[type=checkbox][name=js-options]"
       );
-      checkboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-          enabledSettings = 
-            Array.from(checkboxes) // Convert checkboxes to an array to use filter and map.
-            .filter(i => i.checked) // Use Array.filter to remove unchecked checkboxes.
-            .map(i => i.value) // Use Array.map to extract only the checkbox values from the array of objects.
-            changeOption()
-        })
+      checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener("change", function () {
+          enabledSettings = Array.from(checkboxes)
+            .filter((i) => i.checked)
+            .map((i) => i.value);
+          changeOption();
+        });
       });
     },
   };

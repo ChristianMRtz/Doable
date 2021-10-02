@@ -14,9 +14,17 @@ export const TaskFetcher = (function () {
           "Content-Type": "application/json",
           Authorization: `Token token=${sessionStorage.getItem("token")}`,
         },
+        { title, due_date }
+      ),
+    update: (id, important, completed) =>
+      apiFetch(
+        `tasks/${id}`,
+        "PATCH",
         {
-          title, due_date
-        }
+          Authorization: `Token token=${sessionStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        { important, completed }
       ),
     delete: (id) =>
       apiFetch(`tasks/${id}`, "DELETE", {

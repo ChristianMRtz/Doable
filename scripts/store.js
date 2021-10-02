@@ -26,6 +26,12 @@ const STORE = (function () {
     tasks = tasks.filter((task) => task.id !== taskId);
   }
 
+
+  function clear() {
+    this.userData = {};
+    this.tasks = [];
+  }
+
   return {
     getUserData,
     setUserData,
@@ -33,6 +39,7 @@ const STORE = (function () {
     setTasks,
     addTask,
     deleteTask,
+    clear,
   };
 })();
 

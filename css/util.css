@@ -1,0 +1,48 @@
+.flex {
+  display: flex;
+}
+
+.center {
+  justify-content: center;
+}
+
+.space-evenly {
+  justify-content: space-evenly;
+}
+
+.ml-8 {
+  margin-left: 8px;
+}
+
+.mr-8 {
+  margin-right: 8px;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+
+.ml-12 {
+  margin-left: 12px;
+}
+
+.ml-16 {
+  margin-left: 16px;
+}
+
+.mr-16 {
+  margin-right: 16px;
+}
+
+.mt-64 {
+  margin-top: 64px;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.full-width {
+  width: 100%;
+}

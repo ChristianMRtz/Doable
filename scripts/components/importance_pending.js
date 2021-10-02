@@ -117,8 +117,8 @@ const ImportanceP = (() => {
       <label class="title-option">Sort</label>
       <select id="option_order" class ="js-selected">
         <option value="alphabetical">Alphabetical (a-z)</option>
-        <option value="date" selected="selected">Due date</option>
-        <option value="importance">Importance</option>
+        <option value="date">Due date</option>
+        <option value="importance" selected="selected">Importance</option>
       </select>
     </div>
     <div class="select-option">

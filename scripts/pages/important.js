@@ -1,3 +1,5 @@
+import ImportanceI from "../components/importance_important.js";
+import ImportanceP from "../components/importance_pending.js";
 import Task from "../components/tasks.js";
 import DOMHandler from "../dom_handler.js";
 import { TaskFetcher } from "../services/task_fetcher.js";
@@ -103,9 +105,9 @@ const Important = (() => {
     if (options.length === 0) {
       DOMHandler.render(Main);
     } else if (options[0] === "pending") {
-      DOMHandler.render(Pending);
+      DOMHandler.render(ImportanceP);
     } else if (options[0] === "important") {
-      DOMHandler.render(Important);
+      DOMHandler.render(ImportanceI);
     }
   }
 

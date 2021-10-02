@@ -99,7 +99,6 @@ const ImportanceP = (() => {
     const tasks = STORE.getTasks();
     const taskord = tasks
       .sort((a, b) => (a.important < b.important) * 2 - 1)
-      .reverse();
     return taskord
       .filter((task) => task.completed === false)
       .map((taskData) => new Task(taskData))

@@ -1,12 +1,12 @@
 import { apiFetch } from "./api_fetch.js";
 
-export const TaskFetcher = function () {
+export const TaskFetcher = (function () {
   return {
     getAll: () =>
       apiFetch("tasks", "GET", {
         Authorization: `Token token=${sessionStorage.getItem("token")}`,
       }),
-    create: (title) =>
+    create: (title, due_date) =>
       apiFetch(
         "tasks",
         "POST",
@@ -15,7 +15,7 @@ export const TaskFetcher = function () {
           Authorization: `Token token=${sessionStorage.getItem("token")}`,
         },
         {
-          title,
+          title, due_date
         }
       ),
     delete: (id) =>
@@ -23,4 +23,4 @@ export const TaskFetcher = function () {
         Authorization: `Token token=${sessionStorage.getItem("token")}`,
       }),
   };
-};
+})();

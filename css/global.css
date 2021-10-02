@@ -107,3 +107,8 @@ textarea:focus, input:focus{
 option {
   background: #E5E5E5;
 }
+
+input {
+  color: #374151 !important;
+  font-weight: 800;
+}

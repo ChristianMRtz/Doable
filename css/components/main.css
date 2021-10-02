@@ -82,3 +82,14 @@
   color: #6b7280;
 }
 
+.completed {
+  color: #9CA3AF !important;
+}
+
+.completed-too{
+  color: #D1D5DB !important;
+}
+
+.icon-imp{
+  opacity: 0.5;
+}

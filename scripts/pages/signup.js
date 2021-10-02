@@ -2,29 +2,32 @@ import DOMHandler from "../dom_handler.js";
 import { SessionsFetcher } from "../services/sessions_fetcher.js";
 import { TaskFetcher } from "../services/task_fetcher.js";
 import STORE from "../store.js";
+import Login from "./login.js";
 import Main from "./main.js";
-import Signup from "./signup.js";
 
-const Login = (() => {
-  async function loginUser(e) {
+const Signup = (() => {
+  async function SignUser(e) {
     e.preventDefault();
     const { email, password } = e.target;
     try {
-      const userData = await SessionsFetcher.login(email.value, password.value);
+      const userData = await SessionsFetcher.createUser(
+        email.value,
+        password.value
+      );
       STORE.setUserData(userData);
       sessionStorage.setItem("token", userData.token);
       const tasks = await TaskFetcher.getAll();
       STORE.setTasks(tasks);
+      DOMHandler.render(Main);
     } catch (e) {
       console.log(e);
       alert(e);
     }
-    DOMHandler.render(Main);
   }
 
-  function signUp(e) {
+  function login(e) {
     e.preventDefault();
-    DOMHandler.render(Signup)
+    DOMHandler.render(Login);
   }
 
   return {
@@ -38,17 +41,17 @@ const Login = (() => {
             <input type="text" name="email" placeholder="you@example.com" class="input-form">
             <p class="text-form">Password</p>
             <input type="password" name="password" placeholder="******" class="input-form">
-            <button type="submit" class="btn-submit-form">Login</button>
-            <div class="anchor"><a class="create-account_login">Create account</a></div>
+            <button type="submit" class="btn-submit-form">Create account</button>
+            <div class="anchor"><a class="create-account_login">Login</a></div>
           </form>
           `,
     addEventListeners: () => {
       const form = document.querySelector(".js-form");
-      form.addEventListener("submit", loginUser);
-      const sign = document.querySelector(".create-account_login");
-      sign.addEventListener("click", signUp);
+      form.addEventListener("submit", SignUser);
+      const log = document.querySelector(".create-account_login");
+      log.addEventListener("click", login);
     },
   };
 })();
 
-export default Login;
+export default Signup;

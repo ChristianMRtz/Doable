@@ -99,7 +99,6 @@ const ImportanceP = (() => {
     const tasks = STORE.getTasks();
     const taskord = tasks
       .sort((a, b) => (a.important < b.important) * 2 - 1)
-      .reverse();
     return taskord
       .filter((task) => task.completed === false)
       .map((taskData) => new Task(taskData))
@@ -117,8 +116,8 @@ const ImportanceP = (() => {
       <label class="title-option">Sort</label>
       <select id="option_order" class ="js-selected">
         <option value="alphabetical">Alphabetical (a-z)</option>
-        <option value="date" selected="selected">Due date</option>
-        <option value="importance">Importance</option>
+        <option value="date">Due date</option>
+        <option value="importance" selected="selected">Importance</option>
       </select>
     </div>
     <div class="select-option">

@@ -11,6 +11,15 @@ export const SessionsFetcher = (function () {
         },
         { email, password }
       ),
+    createUser: (email, password) =>
+      apiFetch(
+        "signup",
+        "POST",
+        {
+          "Content-Type": "application/json",
+        },
+        { email, password }
+      ),
     logout: () =>
       apiFetch("logout", "DELETE", {
         Authorization: `Token token=${sessionStorage.getItem("token")}`,

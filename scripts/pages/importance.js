@@ -65,8 +65,9 @@ const Importance = (() => {
 
   return {
     render: () => `  
-  <header class="header">
-IMPORTANCE
+   <header class="header">
+    <img src="../assets/doable.svg" class="title-header">
+    <img src="../assets/logout.svg" class="logout-header">
   </header>
   <div class="options">
     <div class="list-option">

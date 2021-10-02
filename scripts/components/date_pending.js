@@ -1,42 +1,46 @@
+
+import Task from "../components/tasks.js";
 import DOMHandler from "../dom_handler.js";
+import Importance from "../pages/importance.js";
+import Important from "../pages/important.js";
+import Main from "../pages/main.js";
+import Pending from "../pages/pending.js";
 import { TaskFetcher } from "../services/task_fetcher.js";
 import STORE from "../store.js";
-import Dates from "./date_task.js";
-import Importance from "./importance.js";
-import Main from "./main.js";
-import Important from "./important.js";
-import Task from "../components/tasks.js";
 
-const Pending = (() => {
-  let enabledSettings = [];
+
+
+const DatesP = (() => {
+  
+  let enabledSettings = []
 
   async function createTask(e) {
     e.preventDefault();
     const { title, due_date } = e.target;
-    if (title.value.length > 0) {
-      const newTask = await TaskFetcher.create(title.value, due_date.value);
-      STORE.addTask(newTask);
-      DOMHandler.render(Main);
-    } else {
-      alert("Title is empty");
-    }
+    const newTask = await TaskFetcher.create(title.value, due_date.value);
+    STORE.addTask(newTask);
+    DOMHandler.render(Main);
   }
 
   function optionOrder(e) {
     e.preventDefault();
-    if (this.value == "date") {
-      DOMHandler.render(Dates);
+    if (this.value == "alphabetical") {
+      DOMHandler.render(Main);
     } else if (this.value == "importance") {
       DOMHandler.render(Importance);
     }
   }
 
   function changeOption() {
-    const options = enabledSettings;
-    if (options.length === 0) {
-      DOMHandler.render(Main);
-    } else if (options.length === 2) {
-      DOMHandler.render(Important);
+    const options = enabledSettings
+    if (options.length === 0){
+      DOMHandler.render(Main)
+    }
+    else if (options[0] === "pending"){
+      DOMHandler.render(Pending)
+    }
+    else if (options[0] === "important"){
+      DOMHandler.render(Important)
     }
   }
 
@@ -58,28 +62,28 @@ const Pending = (() => {
   }
 
   async function editBoolean(e) {
-    e.preventDefault();
-    const id = parseInt(e.target.id);
-    const important = e.target.class;
-    const completed = e.target.checked;
-    try {
-      const editTask = await TaskFetcher.update(id, important, completed);
-      const newData = {
-        important: editTask.important,
-        completed: editTask.completed,
-      };
-      STORE.updateTask(id, newData);
-      DOMHandler.render(Main);
-    } catch (e) {
-      console.log(e);
-      alert(e);
-    }
+      e.preventDefault();
+      const id = parseInt(e.target.id);
+      const important = e.target.class;
+      const completed = e.target.checked;
+      try {
+        const editTask = await TaskFetcher.update(id, important, completed);
+        const newData = {
+          important: editTask.important,
+          completed: editTask.completed,
+        }
+        STORE.updateTask(id, newData);
+        DOMHandler.render(Main);
+      } catch (e) {
+        console.log(e);
+        alert(e);
+      }
   }
 
   async function editImportant(e) {
-    const check = e.target.closest(".js-select-important");
-    const checkImportant = check.closest(".btn-imp");
-    if (check) {
+    const check = e.target.closest(".js-select-important")
+    const checkImportant = check.closest(".btn-imp")
+    if (check){
       e.preventDefault();
       const id = parseInt(check.id);
       const important = checkImportant.id === "false" ? true : false;
@@ -87,9 +91,9 @@ const Pending = (() => {
         const editTask = await TaskFetcher.update(id, important);
         const newData = {
           important: editTask.important,
-        };
+        }
         STORE.updateTask(id, newData);
-        DOMHandler.render(Pending);
+        DOMHandler.render(DatesP);
       } catch (e) {
         console.log(e);
         alert(e);
@@ -99,11 +103,8 @@ const Pending = (() => {
 
   function generateTasks() {
     const tasks = STORE.getTasks();
-    const taskord = tasks.sort((a, b) => a.title.localeCompare(b.title));
-    return taskord
-      .filter((task) => task.completed === false)
-      .map((taskData) => new Task(taskData))
-      .join("");
+    const taskord = tasks.sort((a, b) => new Date(a.due_date) - new Date(b.due_date)).reverse();
+    return taskord.filter(task => task.completed === false).map((taskData) => new Task(taskData)).join("");
   }
 
   return {
@@ -117,18 +118,18 @@ const Pending = (() => {
       <label class="title-option">Sort</label>
       <select id="option_order" class ="js-selected">
         <option value="alphabetical">Alphabetical (a-z)</option>
-        <option value="date">Due date</option>
+        <option value="date" selected="selected">Due date</option>
         <option value="importance">Importance</option>
       </select>
     </div>
     <div class="select-option">
       <label class="title-option">Show</label>
-      <div class="option-view">
-        <input type="checkbox" id="pending" name = "js-options" value="pending" checked ="true">
+      <form class="option-view">
+        <input type="checkbox" id="pending" name = "js-options"  value="pending" checked = "true">
         <label for="pending" class="options-view"> Only pending</label>
-        <input type="checkbox" id="important" name = "js-options" value="important">
+        <input type="checkbox" id="important" name = "js-options"  value="important">
         <label for="important" class="options-view"> Only important</label>
-      </div>
+      </form>
     </div>
   </div>
   <div class="content">
@@ -152,23 +153,24 @@ const Pending = (() => {
       selected.addEventListener("change", optionOrder);
       const btnLogout = document.querySelector(".js-logout");
       btnLogout.addEventListener("click", goToLogout);
-      const editbtn = document.querySelector(`.content`);
+            const editbtn = document.querySelector(`.content`);
       editbtn.addEventListener("change", editBoolean);
       const editImportants = document.querySelector(`.content`);
       editImportants.addEventListener("click", editImportant);
       const checkboxes = document.querySelectorAll(
         "input[type=checkbox][name=js-options]"
       );
-      checkboxes.forEach(function (checkboxed) {
-        checkboxed.addEventListener("change", function () {
-          enabledSettings = Array.from(checkboxes)
-            .filter((i) => i.checked)
-            .map((i) => i.value);
-          changeOption();
-        });
+      checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+          enabledSettings = 
+            Array.from(checkboxes) // Convert checkboxes to an array to use filter and map.
+            .filter(i => i.checked) // Use Array.filter to remove unchecked checkboxes.
+            .map(i => i.value) // Use Array.map to extract only the checkbox values from the array of objects.
+            changeOption()
+        })
       });
     },
   };
 })();
 
-export default Pending;
+export default DatesP;

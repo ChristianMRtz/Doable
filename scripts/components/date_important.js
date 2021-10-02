@@ -1,31 +1,27 @@
+import Task from "../components/tasks.js";
 import DOMHandler from "../dom_handler.js";
+import Importance from "../pages/importance.js";
+import Important from "../pages/important.js";
+import Main from "../pages/main.js";
+import Pending from "../pages/pending.js";
 import { TaskFetcher } from "../services/task_fetcher.js";
 import STORE from "../store.js";
-import Dates from "./date_task.js";
-import Importance from "./importance.js";
-import Main from "./main.js";
-import Important from "./important.js";
-import Task from "../components/tasks.js";
 
-const Pending = (() => {
+const DatesI = (() => {
   let enabledSettings = [];
 
   async function createTask(e) {
     e.preventDefault();
     const { title, due_date } = e.target;
-    if (title.value.length > 0) {
-      const newTask = await TaskFetcher.create(title.value, due_date.value);
-      STORE.addTask(newTask);
-      DOMHandler.render(Main);
-    } else {
-      alert("Title is empty");
-    }
+    const newTask = await TaskFetcher.create(title.value, due_date.value);
+    STORE.addTask(newTask);
+    DOMHandler.render(Main);
   }
 
   function optionOrder(e) {
     e.preventDefault();
-    if (this.value == "date") {
-      DOMHandler.render(Dates);
+    if (this.value == "alphabetical") {
+      DOMHandler.render(Main);
     } else if (this.value == "importance") {
       DOMHandler.render(Importance);
     }
@@ -35,7 +31,9 @@ const Pending = (() => {
     const options = enabledSettings;
     if (options.length === 0) {
       DOMHandler.render(Main);
-    } else if (options.length === 2) {
+    } else if (options[0] === "pending") {
+      DOMHandler.render(Pending);
+    } else if (options[0] === "important") {
       DOMHandler.render(Important);
     }
   }
@@ -89,7 +87,7 @@ const Pending = (() => {
           important: editTask.important,
         };
         STORE.updateTask(id, newData);
-        DOMHandler.render(Pending);
+        DOMHandler.render(DatesP);
       } catch (e) {
         console.log(e);
         alert(e);
@@ -99,9 +97,11 @@ const Pending = (() => {
 
   function generateTasks() {
     const tasks = STORE.getTasks();
-    const taskord = tasks.sort((a, b) => a.title.localeCompare(b.title));
+    const taskord = tasks
+      .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
+      .reverse();
     return taskord
-      .filter((task) => task.completed === false)
+      .filter((task) => task.important === true)
       .map((taskData) => new Task(taskData))
       .join("");
   }
@@ -117,18 +117,18 @@ const Pending = (() => {
       <label class="title-option">Sort</label>
       <select id="option_order" class ="js-selected">
         <option value="alphabetical">Alphabetical (a-z)</option>
-        <option value="date">Due date</option>
+        <option value="date" selected="selected">Due date</option>
         <option value="importance">Importance</option>
       </select>
     </div>
     <div class="select-option">
       <label class="title-option">Show</label>
-      <div class="option-view">
-        <input type="checkbox" id="pending" name = "js-options" value="pending" checked ="true">
+      <form class="option-view">
+        <input type="checkbox" id="pending" name = "js-options"  value="pending" >
         <label for="pending" class="options-view"> Only pending</label>
-        <input type="checkbox" id="important" name = "js-options" value="important">
+        <input type="checkbox" id="important" name = "js-options"  value="important" checked = "true">
         <label for="important" class="options-view"> Only important</label>
-      </div>
+      </form>
     </div>
   </div>
   <div class="content">
@@ -159,8 +159,8 @@ const Pending = (() => {
       const checkboxes = document.querySelectorAll(
         "input[type=checkbox][name=js-options]"
       );
-      checkboxes.forEach(function (checkboxed) {
-        checkboxed.addEventListener("change", function () {
+      checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener("change", function () {
           enabledSettings = Array.from(checkboxes)
             .filter((i) => i.checked)
             .map((i) => i.value);
@@ -171,4 +171,4 @@ const Pending = (() => {
   };
 })();
 
-export default Pending;
+export default DatesI;

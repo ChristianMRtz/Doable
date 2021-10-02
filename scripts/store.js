@@ -31,7 +31,6 @@ const STORE = (function () {
     setUserData,
     getTasks,
     setTasks,
-    getTask,
     addTask,
     deleteTask,
   };

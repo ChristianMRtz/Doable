@@ -1,6 +1,6 @@
 import { BASE_URL } from "../constants.js";
 
-export const apiFetch = async function (endpoint, method, headers, body) {
+export const apiFetch = async function (endpoint, method ="GET", headers, body) {
   const response = await fetch(`${BASE_URL}${endpoint}`, {
     method,
     headers,

@@ -1,7 +1,7 @@
 # Doable
 ## To run
 Doable is a Task Manager made in Javascript Vanilla
-`Run project with any live server`
+> Run project with any live server
 
 ##
 
